@@ -1,0 +1,8 @@
+{
+  "name": "Copy of Timension: The Vintage Chronicle",
+  "description": "A time-travel learning universe presented as a 1920s interactive newspaper. Experience history through AI mentors, living comic strips, and immersive storytelling.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

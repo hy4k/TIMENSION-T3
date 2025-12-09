@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timension</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['"Playfair Display"', 'serif'],
+              body: ['"IM Fell English"', 'serif'],
+              mono: ['"Courier Prime"', 'monospace'],
+            },
+            colors: {
+              'paper': '#e8dfc8',      /* Darker, more aged paper */
+              'paper-light': '#fdf6e3',
+              'ink': '#2b2218',        /* Dark brown/black for warmer ink look */
+              'ink-light': '#4a3f35',
+              'sepia-accent': '#8b5e3c',
+              'vintage-gold': '#c5a059',
+              'alert-red': '#800000',  /* Deep crimson */
+            },
+            backgroundImage: {
+              'grain': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmRmNmUzIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiIG9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')",
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #e8dfc8;
+        color: #2b2218;
+        /* THE VINTAGE GRADE: Global filters for the old look */
+        filter: sepia(0.2) contrast(1.05) brightness(0.95);
+      }
+      
+      /* Film Grain Overlay */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: multiply;
+      }
+
+      /* Vignette */
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, transparent 50%, rgba(43, 34, 24, 0.2) 100%);
+        pointer-events: none;
+        z-index: 9998;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #d6cdae; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #5c4b3a; 
+      }
+
+      .newspaper-border {
+        border-top: 4px double #2b2218;
+        border-bottom: 2px solid #2b2218;
+      }
+      
+      .drop-cap {
+        float: left;
+        font-size: 3.5rem;
+        line-height: 0.8;
+        font-weight: bold;
+        margin-right: 0.5rem;
+        margin-top: 0.1rem;
+        font-family: "Playfair Display", serif;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://aistudiocdn.com/vite@^7.2.7"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
