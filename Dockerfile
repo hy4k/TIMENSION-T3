@@ -7,6 +7,10 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
+# Accept API_KEY as build argument
+ARG API_KEY
+ENV API_KEY=$API_KEY
+
 # Install dependencies
 RUN npm install
 

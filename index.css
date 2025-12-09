@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .min-h-safe {
+    min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
+}
+
+/* Ensure smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+    overscroll-behavior-y: none; /* Prevent bounce effect on mobile */
+    height: 100%;
+}
