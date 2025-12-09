@@ -187,29 +187,6 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
                         </div>
 
                         <div className="space-y-5">
-                            {/* API Status */}
-                            <div onClick={handleApiKeySelect} className={`border-2 border-ink p-2 cursor-pointer hover:bg-ink/5 text-center ${apiKeySet ? 'opacity-70' : 'animate-pulse bg-alert-red/10'}`}>
-                                <div className="font-mono text-[9px] uppercase font-bold mb-1">Telegraph Connection</div>
-                                <div className={`font-bold text-xs uppercase ${apiKeySet ? 'text-ink' : 'text-alert-red'}`}>
-                                    {apiKeySet ? (isGlobalKey ? '[ SYSTEM ONLINE ]' : '[ KEY INSERTED ]') : (showKeyInput ? '[ ENTER CODE BELOW ]' : '[ SIGNAL LOST - CLICK TO FIX ]')}
-                                </div>
-                            </div>
-
-                            {showKeyInput && !apiKeySet && (
-                                <div className="flex gap-2 animate-in fade-in slide-in-from-top-2">
-                                    <input
-                                        type="password"
-                                        value={manualKey}
-                                        onChange={(e) => setManualKeyInput(e.target.value)}
-                                        className="w-full bg-paper border-b-2 border-ink font-mono text-sm p-2 focus:outline-none placeholder:text-ink/20"
-                                        placeholder="Paste API Key Here"
-                                    />
-                                    <button onClick={saveManualKey} className="bg-ink text-paper px-3 font-bold font-mono text-xs uppercase hover:bg-sepia-accent">
-                                        Save
-                                    </button>
-                                </div>
-                            )}
-
                             <div>
                                 <label className="font-mono text-[10px] uppercase font-bold block mb-1 text-left">Traveler Identity</label>
                                 <input

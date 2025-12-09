@@ -38,8 +38,16 @@ export const testApiKey = async (): Promise<boolean> => {
   }
 };
 
+// Simple in-memory cache for images
+const imageCache = new Map<string, string>();
+
 // Generic Image Generator for Mentors/Pivots
 export const generateImage = async (prompt: string, aspectRatio: string = "1:1"): Promise<string | null> => {
+  const cacheKey = `${prompt}-${aspectRatio}`;
+  if (imageCache.has(cacheKey)) {
+    return imageCache.get(cacheKey)!;
+  }
+
   const ai = getClient();
   if (!ai) return null;
 
@@ -53,7 +61,9 @@ export const generateImage = async (prompt: string, aspectRatio: string = "1:1")
     if (response.candidates?.[0]?.content?.parts) {
       for (const part of response.candidates[0].content.parts) {
         if (part.inlineData) {
-          return `data:image/png;base64,${part.inlineData.data}`;
+          const result = `data:image/png;base64,${part.inlineData.data}`;
+          imageCache.set(cacheKey, result);
+          return result;
         }
       }
     }
