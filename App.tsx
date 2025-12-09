@@ -902,8 +902,8 @@ const App: React.FC = () => {
                     {currentSection === AppSection.CHRONICLE && <Simulation />}
                 </main>
                 <TravelerVault isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} userEmail={session?.user?.email} onLogout={handleLogout} />
-                <Navigation currentSection={currentSection} onNavigate={setCurrentSection} />
             </div>
+            <Navigation currentSection={currentSection} onNavigate={setCurrentSection} />
         </div>
     );
 };
