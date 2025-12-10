@@ -837,8 +837,8 @@ const Simulation: React.FC = () => {
     const pivots: PivotPoint[] = [
         { id: 'titanic', event: 'Sinking of the Titanic', year: '1912', originalOutcome: 'Ship sinks, safety regulations change.', image: '' },
         { id: 'bunker', event: 'The Berlin Bunker', year: '1945', originalOutcome: 'Hitler commits suicide.', image: '' },
-        { id: 'order', event: 'The Great Reset', year: '2024', originalOutcome: 'Global geopolitical shifts occur gradually.', image: '' },
-        { id: 'emu', event: 'The Great Emu War', year: '1932', originalOutcome: 'Australian military fails to cull emus.', image: '' },
+        { id: 'hiroshima', event: 'Hiroshima Attack', year: '1945', originalOutcome: 'Atomic bomb dropped, ending WWII.', image: '' },
+        { id: 'rajiv', event: 'Assassination of Rajiv Gandhi', year: '1991', originalOutcome: 'Former Indian PM assassinated by suicide bomber.', image: '' },
     ];
 
     const handleSimulate = async () => {
@@ -868,8 +868,8 @@ const Simulation: React.FC = () => {
                                             prompt={
                                                 p.id === 'titanic' ? 'RMS Titanic sinking 1912 vintage photo' :
                                                     p.id === 'bunker' ? 'Berlin Bunker ruins 1945 vintage photo' :
-                                                        p.id === 'order' ? 'Surreal art of a new world order, 2024, political map changing' :
-                                                            'Australian soldier fighting giant emus, 1932, vintage funny photo'
+                                                        p.id === 'hiroshima' ? 'Mushroom cloud over Hiroshima, 1945, vintage black and white photo' :
+                                                            'Rajiv Gandhi with supporters in 1991, vintage news photo, india'
                                             }
                                             alt={p.event}
                                             className="w-full h-full"
