@@ -4,7 +4,15 @@ export enum AppSection {
   CHRONOSCOPE = 'CHRONOSCOPE',
   MENTORS = 'MENTORS',
   CHRONICLE = 'CHRONICLE',
+  COMMUNITY = 'COMMUNITY',
   EDITOR = 'EDITOR',
+}
+
+export interface Suggestion {
+  id: string;
+  text: string;
+  timestamp: number;
+  // No user info as requested
 }
 
 export interface NewsArticle {
@@ -35,17 +43,17 @@ export interface ChatMessage {
 }
 
 export interface AlternateHistoryResult {
-    timelineSteps: string[];
-    finalHeadline: string;
-    imageUrl?: string;
+  timelineSteps: string[];
+  finalHeadline: string;
+  imageUrl?: string;
 }
 
 export interface PivotPoint {
-    id: string;
-    event: string;
-    year: string;
-    originalOutcome: string;
-    image: string;
+  id: string;
+  event: string;
+  year: string;
+  originalOutcome: string;
+  image: string;
 }
 
 // New Interface for the input-based Chronoscope

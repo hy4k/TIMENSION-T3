@@ -4,8 +4,9 @@ import { OldPaperTexture } from './components/OldPaperTexture';
 import { Navigation } from './components/Navigation';
 import { SectionHeader } from './components/SectionHeader';
 import { generateDailyHeadline, chatWithMentor, hasGlobalApiKey, simulateAlternateHistory, generateVintageMap, generateLocationTrivia, generateHistoricalPhotos, generateImage, testApiKey, setManualApiKey } from './services/geminiService';
-import { AppSection, NewsArticle, Mentor, ChatMessage, TravelerProfile, AlternateHistoryResult, PivotPoint, ChronoscopeData } from './types';
-import { Send, RefreshCw, ArrowRight, Star, ArrowLeft, History, ShieldAlert, Stamp, Zap, User, Briefcase, Gem, Feather, X, Radio, CheckCircle, Settings, LogOut, Compass, Globe, Timer, Search, Sparkles, MessageSquare, Clock, MapPin, AlertTriangle, Radar, ExternalLink, Map, Camera, BookOpen } from 'lucide-react';
+import { AppSection, NewsArticle, Mentor, ChatMessage, TravelerProfile, AlternateHistoryResult, PivotPoint, ChronoscopeData, Suggestion } from './types';
+import { Send, RefreshCw, ArrowRight, Star, ArrowLeft, History, ShieldAlert, Stamp, Zap, User, Briefcase, Gem, Feather, X, Radio, CheckCircle, Settings, LogOut, Compass, Globe, Timer, Search, Sparkles, MessageSquare, Clock, MapPin, AlertTriangle, Radar, ExternalLink, Map, Camera, BookOpen, MessageCircle } from 'lucide-react';
+import { fetchSuggestions, submitSuggestion } from './services/communityService';
 
 // Type declaration for AI Studio window object
 declare global {
@@ -739,6 +740,93 @@ const MentorChat: React.FC = () => {
     );
 };
 
+// 5. COMMUNITY (Suggestions)
+const CommunityView: React.FC = () => {
+    const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+    const [newSuggestion, setNewSuggestion] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        loadSuggestions();
+    }, []);
+
+    const loadSuggestions = async () => {
+        setLoading(true);
+        const data = await fetchSuggestions();
+        setSuggestions(data);
+        setLoading(false);
+    };
+
+    const handleSubmit = async () => {
+        if (!newSuggestion.trim()) return;
+        setSubmitting(true);
+        const success = await submitSuggestion(newSuggestion);
+        if (success) {
+            setNewSuggestion('');
+            // Optimistic update or reload
+            if (suggestions.length < 50) { // If using mock or simple list, just append
+                // If real DB, we should reload or append with temp ID. 
+                // Since we don't return the new ID from submitSuggestion in simple version, we'll reload.
+                loadSuggestions();
+            } else {
+                loadSuggestions();
+            }
+            alert("Suggestion transmitted to the ether!");
+        } else {
+            alert("Transmission failed. The airwaves are jammed.");
+        }
+        setSubmitting(false);
+    };
+
+    return (
+        <div className="p-4 max-w-2xl mx-auto pb-24 min-h-[calc(100vh-80px)]">
+            <SectionHeader title="Public Forum" subtitle="Anonymous Voice of the People" />
+
+            <div className="bg-[#fdf6e3] border-4 border-ink p-6 shadow-xl mb-8 relative">
+                <div className="absolute -top-3 left-6 bg-ink text-paper px-2 font-mono text-xs uppercase font-bold">Write to the Editor</div>
+                <textarea
+                    value={newSuggestion}
+                    onChange={(e) => setNewSuggestion(e.target.value)}
+                    placeholder="How should this world evolve? (Anonymous)"
+                    className="w-full h-32 bg-white/50 border-2 border-ink p-4 font-handwriting text-xl text-ink placeholder:text-ink/30 focus:outline-none mb-4"
+                />
+                <button
+                    onClick={handleSubmit}
+                    disabled={submitting || !newSuggestion.trim()}
+                    className="w-full bg-ink text-paper py-3 font-mono font-bold uppercase hover:bg-sepia-accent transition-colors flex justify-center items-center gap-2"
+                >
+                    {submitting ? <RefreshCw className="animate-spin" size={16} /> : <Send size={16} />}
+                    Submit Suggestion
+                </button>
+                <p className="font-mono text-[9px] text-ink/50 mt-2 text-center uppercase">* All telegrams are anonymous and visible to all travelers.</p>
+            </div>
+
+            <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-4">
+                    <MessageCircle size={20} className="text-ink" />
+                    <h3 className="font-serif font-bold text-xl uppercase">Recent Transmissions</h3>
+                </div>
+                {loading ? (
+                    <div className="text-center py-10 opacity-50"><RefreshCw className="animate-spin inline-block mr-2" /> Tuning frequency...</div>
+                ) : (
+                    suggestions.map(s => (
+                        <div key={s.id} className="bg-white p-4 border-b-2 border-ink/10 relative group hover:bg-[#f0e6d2] transition-colors">
+                            <div className="font-serif text-lg text-ink leading-snug">"{s.text}"</div>
+                            <div className="mt-2 text-[10px] font-mono text-ink/40 uppercase text-right">
+                                {new Date(s.timestamp).toLocaleDateString()} • Anonymous
+                            </div>
+                        </div>
+                    ))
+                )}
+                {suggestions.length === 0 && !loading && (
+                    <div className="text-center font-mono text-xs text-ink/50 py-10">No signals received yet. Be the first.</div>
+                )}
+            </div>
+        </div>
+    );
+};
+
 // 4. SIMULATION
 const Simulation: React.FC = () => {
     const [result, setResult] = useState<AlternateHistoryResult | null>(null);
@@ -749,6 +837,8 @@ const Simulation: React.FC = () => {
     const pivots: PivotPoint[] = [
         { id: 'titanic', event: 'Sinking of the Titanic', year: '1912', originalOutcome: 'Ship sinks, safety regulations change.', image: '' },
         { id: 'bunker', event: 'The Berlin Bunker', year: '1945', originalOutcome: 'Hitler commits suicide.', image: '' },
+        { id: 'order', event: 'The Great Reset', year: '2024', originalOutcome: 'Global geopolitical shifts occur gradually.', image: '' },
+        { id: 'emu', event: 'The Great Emu War', year: '1932', originalOutcome: 'Australian military fails to cull emus.', image: '' },
     ];
 
     const handleSimulate = async () => {
@@ -775,7 +865,12 @@ const Simulation: React.FC = () => {
                                     <div className="h-24 w-full bg-gray-300 mb-2 overflow-hidden filter grayscale">
                                         {/* DYNAMIC PIVOT IMAGE */}
                                         <AsyncImage
-                                            prompt={p.id === 'titanic' ? 'RMS Titanic sinking 1912 vintage photo' : 'Berlin Bunker ruins 1945 vintage photo'}
+                                            prompt={
+                                                p.id === 'titanic' ? 'RMS Titanic sinking 1912 vintage photo' :
+                                                    p.id === 'bunker' ? 'Berlin Bunker ruins 1945 vintage photo' :
+                                                        p.id === 'order' ? 'Surreal art of a new world order, 2024, political map changing' :
+                                                            'Australian soldier fighting giant emus, 1932, vintage funny photo'
+                                            }
                                             alt={p.event}
                                             className="w-full h-full"
                                             aspectRatio="16:9"
@@ -794,7 +889,7 @@ const Simulation: React.FC = () => {
                             <textarea
                                 value={customInput}
                                 onChange={(e) => setCustomInput(e.target.value)}
-                                placeholder="e.g. He escapes via secret tunnel..."
+                                placeholder=""
                                 className="w-full h-24 border-2 border-ink p-3 font-mono text-sm focus:outline-none bg-white/50 text-ink"
                             />
                             <button onClick={handleSimulate} disabled={calculating || !customInput}
@@ -900,6 +995,7 @@ const App: React.FC = () => {
                     {currentSection === AppSection.CHRONOSCOPE && <Chronoscope />}
                     {currentSection === AppSection.MENTORS && <MentorChat />}
                     {currentSection === AppSection.CHRONICLE && <Simulation />}
+                    {currentSection === AppSection.COMMUNITY && <CommunityView />}
                 </main>
                 <TravelerVault isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} userEmail={session?.user?.email} onLogout={handleLogout} />
             </div>
