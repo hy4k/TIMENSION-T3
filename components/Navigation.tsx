@@ -13,6 +13,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentSection, onNaviga
     { id: AppSection.HOME, label: 'Dashboard', icon: <Home size={20} /> },
     { id: AppSection.CHRONOSCOPE, label: 'Chronoscope', icon: <Radar size={20} /> },
     { id: AppSection.MENTORS, label: 'Mentors', icon: <Users size={20} /> },
+    { id: AppSection.CHRONICLE, label: 'Simulation', icon: <Zap size={20} /> },
     { id: AppSection.COMMUNITY, label: 'Community', icon: <MessageSquare size={20} /> },
   ];
 
